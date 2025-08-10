@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from sqlalchemy import Column, DateTime, String, Boolean
 from uuid import uuid4
 from passlib.context import CryptContext
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
@@ -17,6 +18,8 @@ class User(Base):
     password = Column(String, nullable=False)
     is_verified = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    files = relationship("File", back_populates="owner", cascade="all, delete-orphan")
 
     def verify_password(self, plain_password:str)->bool:
         return pwd_context.verify(plain_password, self.password)
