@@ -12,10 +12,10 @@ class FileVersion(Base):
     __tablename__ = "file_versions"
 
     id: Mapped[str] = mapped_column(String, primary_key=True, index=True, default=lambda: str(uuid4()), unique=True, nullable=False,)
-    file_id = Column(String, ForeignKey("files.id", ondelete="CASCADE"))
+    file_id: Mapped[str] = mapped_column(String, ForeignKey("files.id", ondelete="CASCADE"))
     version_number: Mapped[int] = mapped_column(Integer, nullable=False)
     check_sum: Mapped[str] = mapped_column(String, nullable=False)
-    storage_path = Column(String, nullable=False, unique=True)
+    storage_path: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     is_current: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
