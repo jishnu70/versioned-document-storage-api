@@ -6,6 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from app.config import config
 from app.models.User import User
 from app.models.File import File
 from app.models.FileVersion import FileVersion
@@ -143,6 +144,13 @@ async def save_file_service(db: AsyncSession, user_id: str, file: UploadFile):
     filename = file.filename
     if not filename:
         raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE, detail="Provide filename to the file")
+
+    max_file_size = config.MAX_FILE_SIZE
+    if not file.size or file.size > max_file_size:
+        raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"File size exceeds limit of {max_file_size // (1024 * 1024)} MB"
+            )
     file_content = await file.read()
     logger.info("File content read, size: %s bytes", len(file_content))
     try:

@@ -8,6 +8,7 @@ class AppSetting(BaseSettings):
     JWT_ALGORITHM: str = ""
     MAIL_ACCOUNT: str = ""
     MAIL_PASSWORD: str = ""
+    MAX_FILE_SIZE: int = 10 * 1024 * 1024
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
