@@ -6,7 +6,6 @@ from sqlalchemy import Column, String, ForeignKey, DateTime
 from datetime import datetime, timezone
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from app.models.FileVersion import FileVersion
 
 class File(Base):
     __tablename__ = "files"
@@ -17,9 +16,10 @@ class File(Base):
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     owner = relationship("User", back_populates="files")
-    versions: Mapped[List[FileVersion]] = relationship(
+    versions: Mapped[List["FileVersion"]] = relationship(
         "FileVersion",
         back_populates="version_file",
         cascade="all, delete-orphan",
-        order_by="FileVersion.version_number"
+        order_by="FileVersion.version_number",
+        lazy="selectin"
     )

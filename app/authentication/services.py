@@ -4,11 +4,11 @@ from fastapi import HTTPException, status
 from sqlalchemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from background.OtpService import OtpService
-from models.User import User
-from schemas.User import UserCreate, UserCreateResponse
-from schemas.Otp import OtpRequest, OtpResponse
-from background.celery_app import send_otp_email
+from app.background.OtpService import OtpService
+from app.models.User import User
+from app.schemas.User import UserCreate, UserCreateResponse
+from app.schemas.Otp import OtpRequest, OtpResponse
+from app.background.celery_app import send_otp_email
 import logging
 
 logger = logging.getLogger(__name__)

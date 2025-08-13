@@ -9,7 +9,7 @@ from sqlalchemy.future import select
 from app.authentication.tokenManager import decode_token
 from app.database import get_db
 import logging
-from app.models import User
+from app.models.User import User
 
 logger = logging.getLogger(__name__)
 

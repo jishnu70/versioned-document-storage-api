@@ -10,3 +10,6 @@ wheels/
 .venv
 .env
 req.txt
+*.rdb
+*.db
+uploads/

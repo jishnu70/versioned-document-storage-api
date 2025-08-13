@@ -5,7 +5,7 @@ from enum import Enum
 from fastapi import HTTPException, status
 import jwt
 from jwt import ExpiredSignatureError, InvalidTokenError
-from config import config
+from app.config import config
 
 SECRET_KEY = config.SECRET_KEY
 JWT_ALGORITHM = config.JWT_ALGORITHM

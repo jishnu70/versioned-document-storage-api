@@ -1,9 +1,12 @@
+# infrastructure/file_storage.py
+
 from pathlib import Path
+import aiofiles
 
 BASE_UPLOAD_DIR = Path("uploads")
 BASE_UPLOAD_DIR.mkdir(exist_ok=True)
 
-def save_file_locally(file_id: str, version_id: str, content: bytes, original_filename: str)->str:
+async def save_file_locally(file_id: str, version_id: str, content: bytes, original_filename: str)->str:
     """
     Save file locally in structure:
     uploads/{file_id}/{version_id}.ext
@@ -17,22 +20,18 @@ def save_file_locally(file_id: str, version_id: str, content: bytes, original_fi
     version_filename = f"{version_id}{extension}"
     file_path = file_folder / version_filename
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(content)
+    # with open(file_path, "wb") as buffer:
+    #         buffer.write(content)
+    async with aiofiles.open(file_path, "wb") as f:
+        await f.write(content)
 
     return str(file_path.resolve())
 
-def fetch_local_file(file_id: str, version: str):
+async def fetch_local_file(file_path: str):
     """
-    Given a file ID and a version ID,
     return the Path to the version file if it exists.
     """
-    folder_path = BASE_UPLOAD_DIR / str(file_id)
-
-    if not folder_path.exists() or not folder_path.is_dir():
-        return None
-
-    version_file_path = folder_path / str(version)
+    version_file_path = Path(file_path)
 
     if version_file_path.exists() and version_file_path.is_file():
         return version_file_path

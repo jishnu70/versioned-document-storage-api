@@ -12,7 +12,7 @@ from app.schemas.Token import TokenResponse
 from app.schemas.User import UserCreate, UserCreateResponse, UserLogin
 from app.database import get_db
 import logging
-from background.OtpService import OtpService, get_otp_service
+from app.background.OtpService import OtpService, get_otp_service
 
 logger = logging.getLogger(__name__)
 authRoute = APIRouter(prefix="/auth", tags=["auth"])

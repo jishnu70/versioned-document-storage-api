@@ -4,7 +4,8 @@ from fastapi import FastAPI
 import uvicorn
 from app.database import engine, Base
 from contextlib import asynccontextmanager
-from routes.authRoutes import authRoute
+from app.routes.authRoutes import authRoute
+from app.routes.fileRoutes import file_router
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,13 +35,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(authRoute)
+app.include_router(file_router)
 
 @app.get("/")
 def root():
     return {"message": "backend is online"}
 
 def main():
-    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="localhost", port=8000, reload=True)
 
 if __name__ == "__main__":
     main()

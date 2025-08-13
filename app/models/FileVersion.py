@@ -3,7 +3,6 @@
 from uuid import uuid4
 from sqlalchemy import Boolean, Column, String, ForeignKey, DateTime, Integer
 from datetime import datetime, timezone
-from app.models.File import File
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.utils.hash_util import hash_bytes
 from app.database import Base
@@ -19,7 +18,7 @@ class FileVersion(Base):
     is_current: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
-    version_file: Mapped["File"] = relationship("File", back_populates="versions")
+    version_file: Mapped["File"] = relationship("File", back_populates="versions", lazy="selectin")
 
     @staticmethod
     def hash_file_contents(content: bytes)->str:
