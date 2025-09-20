@@ -2,11 +2,12 @@
 
 from celery import Celery
 from app.background.OtpService import OtpSendError, get_otp_service
+from app.config import config
 
 celery_app = Celery(
     "background_worker",
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0"
+    broker=config.CELERY_BROKER_URL,
+    backend=config.CELERY_BACKEND_URL
 )
 
 @celery_app.task(name="otp.send_email")

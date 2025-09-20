@@ -1,0 +1,15 @@
+ARG PYTHON_VERSION=3.13.3
+FROM python:${PYTHON_VERSION}-slim as base
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH=/usr/local/bin:$PATH
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock* ./
+RUN pip install --no-cache-dir .
+
+COPY app/ ./app
+
+CMD ["celery", "-A", "app.background.celery_app.celery_app", "worker", "--loglevel=info"]
